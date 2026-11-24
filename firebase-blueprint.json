@@ -1,0 +1,423 @@
+{
+  "entities": {
+    "UserPublic": {
+      "title": "UserPublic",
+      "description": "Publicly scoped non-PII user profile for MKC CBT teachers, students, and admins.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "username": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 64
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "enum": ["super_admin", "guru", "siswa"]
+        },
+        "className": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "username", "name", "role", "className", "createdAt"]
+    },
+    "UserPrivate": {
+      "title": "UserPrivate",
+      "description": "Isolated PII record containing user email address.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Trusted admin role marker document keyed by Firebase Auth UID.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "createdAt"]
+    },
+    "SchoolSettings": {
+      "title": "SchoolSettings",
+      "description": "School identity, exam theme, academic year, and portal footer configuration.",
+      "type": "object",
+      "properties": {
+        "schoolName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "examTheme": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "academicYear": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "footerText": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "updatedBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["schoolName", "examTheme", "academicYear", "footerText", "updatedBy", "updatedAt"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Assessment question owned by a teacher.",
+      "type": "object",
+      "properties": {
+        "teacherUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "type": {
+          "type": "string",
+          "enum": ["pg", "isian", "benar_salah", "uraian"]
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "correctAnswer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "points": {
+          "type": "integer"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["mudah", "sedang", "sulit"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["teacherUid", "subject", "type", "prompt", "correctAnswer", "points", "difficulty", "createdAt", "updatedAt"]
+    },
+    "Exam": {
+      "title": "Exam",
+      "description": "Exam schedule, exam mode settings, and question set configuration.",
+      "type": "object",
+      "properties": {
+        "teacherUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 150
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "examCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "durationMinutes": {
+          "type": "integer"
+        },
+        "questionCount": {
+          "type": "integer"
+        },
+        "kkm": {
+          "type": "integer"
+        },
+        "isPublished": {
+          "type": "boolean"
+        },
+        "requireFullscreen": {
+          "type": "boolean"
+        },
+        "detectTabSwitch": {
+          "type": "boolean"
+        },
+        "detectWindowBlur": {
+          "type": "boolean"
+        },
+        "blockCopyPaste": {
+          "type": "boolean"
+        },
+        "maxViolations": {
+          "type": "integer"
+        },
+        "violationAction": {
+          "type": "string",
+          "enum": ["suspend", "auto_submit"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "teacherUid",
+        "title",
+        "subject",
+        "examCode",
+        "description",
+        "durationMinutes",
+        "questionCount",
+        "kkm",
+        "isPublished",
+        "requireFullscreen",
+        "detectTabSwitch",
+        "detectWindowBlur",
+        "blockCopyPaste",
+        "maxViolations",
+        "violationAction",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ExamSession": {
+      "title": "ExamSession",
+      "description": "Student attempt session for a specific exam.",
+      "type": "object",
+      "properties": {
+        "examId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "teacherUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "studentUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["in_progress", "suspended", "submitted", "timed_out"]
+        },
+        "violationCount": {
+          "type": "integer"
+        },
+        "autoScore": {
+          "type": "integer"
+        },
+        "essayScore": {
+          "type": "integer"
+        },
+        "maxPossibleScore": {
+          "type": "integer"
+        },
+        "finalScore": {
+          "type": "integer"
+        },
+        "essayGraded": {
+          "type": "boolean"
+        },
+        "teacherNotes": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastSavedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "examId",
+        "teacherUid",
+        "studentUid",
+        "status",
+        "violationCount",
+        "autoScore",
+        "essayScore",
+        "maxPossibleScore",
+        "finalScore",
+        "essayGraded",
+        "teacherNotes",
+        "startedAt",
+        "lastSavedAt"
+      ]
+    },
+    "ViolationLog": {
+      "title": "ViolationLog",
+      "description": "Exam Mode proctoring violation audit log entry under a session.",
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "examId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "teacherUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "studentUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "violationType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "actionTaken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "occurredAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "sessionId",
+        "examId",
+        "teacherUid",
+        "studentUid",
+        "violationType",
+        "description",
+        "actionTaken",
+        "occurredAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserPublic" },
+      "description": "Publicly scoped non-PII user profile keyed by Firebase Auth UID."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivate" },
+      "description": "Isolated PII document storing user email address."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Trusted admin role membership registry."
+    },
+    "/schoolSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/SchoolSettings" },
+      "description": "School identity and exam portal branding settings."
+    },
+    "/questions/{questionId}": {
+      "schema": { "$ref": "#/entities/Question" },
+      "description": "Teacher-owned question bank items."
+    },
+    "/exams/{examId}": {
+      "schema": { "$ref": "#/entities/Exam" },
+      "description": "Teacher-owned exam configurations and schedules."
+    },
+    "/examSessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/ExamSession" },
+      "description": "Student exam attempt sessions."
+    },
+    "/examSessions/{sessionId}/violations/{violationId}": {
+      "schema": { "$ref": "#/entities/ViolationLog" },
+      "description": "Violation audit logs tied to a parent exam session."
+    }
+  }
+}

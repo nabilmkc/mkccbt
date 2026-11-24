@@ -1,0 +1,6 @@
+{
+  "name": " MKCBT — Sistem Asesmen Digital",
+  "description": "Aplikasi CBT Ulangan dan Asesmen Digital berbasis web dengan SQL, Exam Mode, Autosave, dan Audit Log Pelanggaran untuk Guru dan Siswa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
