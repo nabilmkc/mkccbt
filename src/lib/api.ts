@@ -1,3 +1,21 @@
+export function getAppBasePath(): string {
+  if (typeof window === 'undefined') return '';
+  const baseHref = document.querySelector('base')?.getAttribute('href');
+  if (baseHref && baseHref.startsWith('/')) {
+    return baseHref.replace(/\/+$/, '');
+  }
+  const pathname = window.location.pathname || '/';
+  if (pathname === '/' || pathname === '/index.html') return '';
+  return pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '');
+}
+
+export function resolveAppUrl(path: string): string {
+  if (!path.startsWith('/')) return path;
+  const base = getAppBasePath();
+  if (!base || path === base || path.startsWith(`${base}/`)) return path;
+  return `${base}${path}`;
+}
+
 class ApiClient {
   private token: string | null = null;
   private csrfToken: string | null = null;
@@ -27,7 +45,7 @@ class ApiClient {
       headers['X-CSRF-Token'] = this.csrfToken;
     }
 
-    const res = await fetch(url, {
+    const res = await fetch(resolveAppUrl(url), {
       ...options,
       headers,
     });

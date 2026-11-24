@@ -14,7 +14,12 @@ import {
   ShieldCheck,
   WifiOff,
 } from 'lucide-react';
-import { api, formatDateTime, formatDurationSeconds } from '../lib/api';
+import {
+  api,
+  formatDateTime,
+  formatDurationSeconds,
+  resolveAppUrl,
+} from '../lib/api';
 import {
   AuthUser,
   ExamLookupResponse,
@@ -736,7 +741,7 @@ export function StudentPortal({
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-9 h-9 rounded-lg bg-white/95 p-0.5 flex items-center justify-center shrink-0 shadow-xs">
                 <img
-                  src="/assets/aistudio/Kabupaten_mempawah_29057062.png"
+                  src={resolveAppUrl('/assets/aistudio/Kabupaten_mempawah_29057062.png')}
                   alt={`Logo ${portalInfo?.schoolName || 'MKC CBT'}`}
                   className="w-full h-full object-contain"
                 />

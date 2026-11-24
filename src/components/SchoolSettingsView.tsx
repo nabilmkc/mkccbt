@@ -7,7 +7,7 @@ import {
   Save,
   Sparkles,
 } from 'lucide-react';
-import { api } from '../lib/api';
+import { api, resolveAppUrl } from '../lib/api';
 import { SchoolSettings } from '../types/cbt';
 
 interface SchoolSettingsViewProps {
@@ -129,7 +129,7 @@ export function SchoolSettingsView({ onUpdated }: SchoolSettingsViewProps) {
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-lg bg-white/95 p-0.5 flex items-center justify-center shrink-0">
                 <img
-                  src="/assets/aistudio/Kabupaten_mempawah_29057062.png"
+                  src={resolveAppUrl('/assets/aistudio/Kabupaten_mempawah_29057062.png')}
                   alt={`Logo ${schoolName || 'SEKOLAH'}`}
                   className="w-full h-full object-contain"
                 />

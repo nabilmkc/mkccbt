@@ -39,13 +39,20 @@ Atur **Environment Variables** di **Vercel Project Settings → Environment Vari
 3. Arahkan reverse proxy Nginx ke `http://127.0.0.1:3000`.
 
 ### B. Shared Hosting / cPanel (Setup Node.js App)
-1. Upload proyek (atau hasil `npm run build`: `dist/`, `api/_server.cjs`, `start.cjs`, `package.json`, `firebase-applet-config.json`).
-2. Di menu **Setup Node.js App** cPanel:
-   - **Node.js version**: 20 atau 22
+Pada shared hosting (CloudLinux) dengan batas RAM ketat, `npm install` di terminal cPanel sering terhenti (`Killed`). Karena `api/_server.cjs` dan `dist/` sudah dibundel mandiri (*self-contained*), Anda **tidak perlu** menjalankan `npm install` maupun `npm run build` di server cPanel:
+1. Di komputer lokal, jalankan `npm install && npm run build`.
+2. Upload ke folder aplikasi di cPanel (`Application root`, mis. `mkcoke`):
+   - folder `dist/`
+   - file `api/_server.cjs`
+   - file `start.cjs`
+   - file `firebase-applet-config.json`
+   - file `.env` *(opsional)*
+3. Di menu **Setup Node.js App** cPanel:
+   - **Node.js version**: 20, 22, atau 24
    - **Application mode**: Production
    - **Application startup file**: `start.cjs`
-   - Tambahkan Environment Variable `SESSION_SECRET`.
-3. Klik **Run NPM Install** (jika upload source tanpa `node_modules`) lalu **Restart**.
+   - Tambahkan Environment Variable `SESSION_SECRET` (dan `APP_BASE_PATH` jika memakai subpath seperti `/cbt`).
+4. Langsung klik **Restart / Start** (tidak perlu klik **Run NPM Install**).
 
 ---
 

@@ -7,6 +7,7 @@
     "dev": "tsx server.ts",
     "start": "node start.cjs",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --external:pg-native --define:process.env.CBT_BUNDLED='\"1\"' --outfile=api/_server.cjs",
+    "build:cpanel": "RAYON_NUM_THREADS=1 TOKIO_WORKER_THREADS=1 UV_THREADPOOL_SIZE=1 GOMAXPROCS=1 npm run build",
     "preview": "vite preview",
     "clean": "rm -rf dist api/_server.cjs server.js",
     "lint": "tsc --noEmit"

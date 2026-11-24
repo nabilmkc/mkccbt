@@ -11,7 +11,7 @@ import {
   Users,
 } from 'lucide-react';
 import studentIllustration from '../assets/images/student_cbt_illustration_1794757646794.jpg';
-import { api } from '../lib/api';
+import { api, resolveAppUrl } from '../lib/api';
 import {
   AuthUser,
   ExamLookupResponse,
@@ -156,7 +156,7 @@ export function LoginView({
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-lg bg-white/95 p-0.5 flex items-center justify-center shrink-0 shadow-xs">
               <img
-                src="/assets/aistudio/Kabupaten_mempawah_29057062.png"
+                src={resolveAppUrl('/assets/aistudio/Kabupaten_mempawah_29057062.png')}
                 alt={`Logo ${schoolName}`}
                 className="w-full h-full object-contain"
               />
@@ -218,7 +218,7 @@ export function LoginView({
             ) : (
               <div className="aspect-[4/3] w-full bg-gradient-to-br from-emerald-50 via-white to-sky-50 flex flex-col items-center justify-center p-8 text-center">
                 <img
-                  src="/assets/aistudio/Kabupaten_mempawah_29057062.png"
+                  src={resolveAppUrl('/assets/aistudio/Kabupaten_mempawah_29057062.png')}
                   alt={`Logo ${schoolName}`}
                   className="w-16 h-16 object-contain mb-3"
                 />

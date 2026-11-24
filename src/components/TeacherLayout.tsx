@@ -14,6 +14,7 @@ import {
   Users,
   X,
 } from 'lucide-react';
+import { resolveAppUrl } from '../lib/api';
 import { AuthUser } from '../types/cbt';
 
 export type TeacherTab =
@@ -102,7 +103,7 @@ export function TeacherLayout({
           <div className="flex items-center gap-2.5 whitespace-nowrap">
             <div className="w-9 h-9 rounded-lg bg-white border border-slate-200 p-0.5 flex items-center justify-center shrink-0">
               <img
-                src="/assets/aistudio/Kabupaten_mempawah_29057062.png"
+                src={resolveAppUrl('/assets/aistudio/Kabupaten_mempawah_29057062.png')}
                 alt="Logo Sekolah MKC CBT"
                 className="w-full h-full object-contain"
               />

@@ -63,8 +63,28 @@ import {
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
+const CONFIGURED_BASE_PATH = (
+  process.env.APP_BASE_PATH ||
+  process.env.PASSENGER_BASE_URI ||
+  ''
+)
+  .trim()
+  .replace(/\/+$/, '');
 
 app.set('trust proxy', 1);
+
+app.use((req: Request, _res: Response, next: NextFunction) => {
+  if (CONFIGURED_BASE_PATH && req.url.startsWith(CONFIGURED_BASE_PATH)) {
+    const stripped = req.url.slice(CONFIGURED_BASE_PATH.length) || '/';
+    req.url = stripped.startsWith('/') ? stripped : `/${stripped}`;
+  } else if (!req.url.startsWith('/api/')) {
+    const apiIdx = req.url.indexOf('/api/');
+    if (apiIdx > 0) {
+      req.url = req.url.slice(apiIdx);
+    }
+  }
+  next();
+});
 
 app.use(
   helmet({
@@ -1342,6 +1362,22 @@ async function startServer() {
       distCandidates[0];
 
     app.use(express.static(distPath));
+    app.use((req, res, next) => {
+      if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+      const parts = req.path.split('/').filter(Boolean);
+      if (parts.length >= 2) {
+        const withoutPrefix = `/${parts.slice(1).join('/')}`;
+        const candidate = path.resolve(distPath, `.${withoutPrefix}`);
+        if (
+          candidate.startsWith(distPath + path.sep) &&
+          fs.existsSync(candidate) &&
+          fs.statSync(candidate).isFile()
+        ) {
+          return res.sendFile(candidate);
+        }
+      }
+      return next();
+    });
     app.get('*', (req, res) => {
       if (req.path.startsWith('/api/')) {
         return res.status(404).json({ error: 'Endpoint API tidak ditemukan.' });
@@ -1353,6 +1389,25 @@ async function startServer() {
           .send(
             'Build frontend (dist/index.html) tidak ditemukan. Jalankan "npm run build" terlebih dahulu.'
           );
+      }
+
+      const forwardedPrefix = req.headers['x-forwarded-prefix']
+        ? String(req.headers['x-forwarded-prefix']).trim().replace(/\/+$/, '')
+        : '';
+      const detectedPrefix =
+        CONFIGURED_BASE_PATH ||
+        forwardedPrefix ||
+        (req.path !== '/' && !path.extname(req.path)
+          ? req.path.replace(/\/+$/, '')
+          : '');
+
+      if (detectedPrefix && detectedPrefix !== '/') {
+        const html = fs.readFileSync(indexHtml, 'utf8');
+        const withBase = html.replace(
+          '<head>',
+          `<head>\n    <base href="${detectedPrefix}/" />`
+        );
+        return res.type('html').send(withBase);
       }
       return res.sendFile(indexHtml);
     });
